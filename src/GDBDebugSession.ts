@@ -1622,6 +1622,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                     name: varobj.expression,
                     value,
                     type: varobj.type,
+                    memoryReference: `&(${varobj.expression})`,
                     variablesReference:
                         parseInt(varobj.numchild, 10) > 0
                             ? this.variableHandles.create({
