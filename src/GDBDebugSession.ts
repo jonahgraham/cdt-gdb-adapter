@@ -67,6 +67,7 @@ export interface ObjectVariableReference {
     type: 'object';
     frameHandle: number;
     varobjName: string;
+    qualifiedName?: string; // todo make required
 }
 
 export type VariableReference =
@@ -994,6 +995,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                               type: 'object',
                               frameHandle: ref.frameHandle,
                               varobjName: varobj.varname,
+                              qualifiedName: varobj.expression,
                           })
                         : 0,
             };
@@ -1103,6 +1105,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                                   type: 'object',
                                   frameHandle: args.frameId,
                                   varobjName: varobj.varname,
+                                  qualifiedName: varobj.expression,
                               })
                             : 0,
                 };
@@ -1552,12 +1555,14 @@ export class GDBDebugSession extends LoggingDebugSession {
                             name: varobj.expression,
                             value,
                             type: varobj.type,
+                            memoryReference: `&(${varobj.expression})`,
                             variablesReference:
                                 parseInt(varobj.numchild, 10) > 0
                                     ? this.variableHandles.create({
                                           type: 'object',
                                           frameHandle: ref.frameHandle,
                                           varobjName: varobj.varname,
+                                          qualifiedName: varobj.expression,
                                       })
                                     : 0,
                         });
@@ -1629,6 +1634,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                                   type: 'object',
                                   frameHandle: ref.frameHandle,
                                   varobjName: varobj.varname,
+                                  qualifiedName: varobj.expression,
                               })
                             : 0,
                 });
@@ -1693,6 +1699,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                         name: objChild.exp,
                         value: objChild.value ? objChild.value : objChild.type,
                         type: objChild.type,
+                        memoryReference: `&(${objChild.exp})`,
                         variablesReference:
                             parseInt(objChild.numchild, 10) > 0
                                 ? this.variableHandles.create({
@@ -1769,6 +1776,7 @@ export class GDBDebugSession extends LoggingDebugSession {
                     name: variableName,
                     value,
                     type: child.type,
+                    memoryReference: `&(${varobjName})`,
                     variablesReference:
                         parseInt(child.numchild, 10) > 0
                             ? this.variableHandles.create({
