@@ -32,6 +32,7 @@ describe('function breakpoints', async () => {
             gdb: gdbPath,
             program: join(testProgramsDir, 'functions'),
             openGdbConsole,
+            logFile: '/tmp/log',
         } as LaunchRequestArguments);
     });
 

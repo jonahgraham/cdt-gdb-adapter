@@ -6,3 +6,4 @@ node_modules
 /test-reports/
 *.tgz
 yarn-error.log
+/.nyc_output/

@@ -34,6 +34,7 @@ describe('Disassembly Test Suite', function () {
                 gdb: gdbPath,
                 program: disProgram,
                 openGdbConsole,
+                logFile: '/tmp/log'
             } as LaunchRequestArguments,
             {
                 path: disSrc,

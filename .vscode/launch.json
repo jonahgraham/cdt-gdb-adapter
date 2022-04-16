@@ -57,12 +57,14 @@
       "args": [
         "--debugserverport",
         "4711",
+        // "--gdb-path",
+        // "gdb.7.6",
         "--timeout",
         "999999",
         "--colors",
         "-r",
         "ts-node/register",
-        "${file}"
+        "src/integration-tests/breakpoints.spec.ts"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
