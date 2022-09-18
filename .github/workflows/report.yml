@@ -28,7 +28,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         with:
           commit: ${{github.event.workflow_run.head_sha}}
-          report_paths: 'windows/*.xml,ubuntu/*.xml,'
+          report_paths: '**/*.xml,'
           fail_on_failure: true
           require_tests: true
           check_name: Integration Tests
