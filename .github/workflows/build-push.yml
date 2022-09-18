@@ -1,14 +1,5 @@
-name: Build and test
-permissions:
-  contents: read
-  statuses: write
-  checks: write
-  pull-requests: write
-on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+name: build-push
+on: [push]
 jobs:
   Build-on-Ubuntu:
     name: Build & Test on Ubuntu
@@ -36,15 +27,15 @@ jobs:
         with:
           name: test-logs-ubuntu
           path: test-logs/
-      - name: Test Reporter
-        uses: dorny/test-reporter@v1.5.0
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          name: Integration Tests on Ubuntu
-          path: test-reports/*.xml
-          reporter: java-junit
-          max-annotations: '0'
-          fail-on-error: 'true'
+          commit: ${{github.event.workflow_run.head_sha}}
+          report_paths: 'test-reports/*.xml'
+          fail_on_failure: true
+          require_tests: true
+          check_name: Test Results on Ubuntu
   Build-on-Windows:
     name: Build & Test on Windows
     runs-on: windows-latest
@@ -72,12 +63,12 @@ jobs:
         with:
           name: test-logs-windows
           path: test-logs/
-      - name: Test Reporter
-        uses: dorny/test-reporter@v1.5.0
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          name: Integration Tests on Windows
-          path: test-reports/*.xml
-          reporter: java-junit
-          max-annotations: '0'
-          fail-on-error: 'true'
+          commit: ${{github.event.workflow_run.head_sha}}
+          report_paths: 'test-reports/*.xml'
+          fail_on_failure: true
+          require_tests: true
+          check_name: Test Results on Windows
