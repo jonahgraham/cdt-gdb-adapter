@@ -10,9 +10,16 @@
 
 import { expect } from 'chai';
 import * as path from 'path';
+import * as os from 'os';
 import { LaunchRequestArguments } from '../GDBDebugSession';
 import { CdtDebugClient } from './debugClient';
-import { fillDefaults, standardBeforeEach, testProgramsDir } from './utils';
+import {
+    fillDefaults,
+    gdbNonStop,
+    isRemoteTest,
+    standardBeforeEach,
+    testProgramsDir,
+} from './utils';
 
 describe('launch', function () {
     let dc: CdtDebugClient;
@@ -20,6 +27,8 @@ describe('launch', function () {
     const emptySpaceProgram = path.join(testProgramsDir, 'empty space');
     const emptySrc = path.join(testProgramsDir, 'empty.c');
     const emptySpaceSrc = path.join(testProgramsDir, 'empty space.c');
+    const unicodeProgram = path.join(testProgramsDir, 'issue-275-测试');
+    const unicodeSrc = path.join(testProgramsDir, 'issue-275-测试.c');
 
     beforeEach(async function () {
         dc = await standardBeforeEach();
@@ -70,6 +79,26 @@ describe('launch', function () {
             } as LaunchRequestArguments),
             {
                 path: emptySpaceSrc,
+                line: 3,
+            }
+        );
+    });
+
+    it('works with unicode in file names', async function () {
+        if (gdbNonStop && isRemoteTest) {
+            // unsupported see GDB bug https://sourceware.org/bugzilla/show_bug.cgi?id=30618
+            this.skip();
+        }
+        if (!gdbNonStop && os.platform() === 'win32' && isRemoteTest) {
+            // on windows remote tests don't support the unicode in file name (except for non-stop which seems to)
+            this.skip();
+        }
+        await dc.hitBreakpoint(
+            fillDefaults(this.test, {
+                program: unicodeProgram,
+            } as LaunchRequestArguments),
+            {
+                path: unicodeSrc,
                 line: 3,
             }
         );
