@@ -8,7 +8,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *********************************************************************/
 import * as path from 'path';
-import * as os from 'os';
 import { expect } from 'chai';
 import { CdtDebugClient } from './debugClient';
 import { standardBeforeEach, testProgramsDir, fillDefaults } from './utils';
