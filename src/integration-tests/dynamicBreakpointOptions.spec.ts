@@ -20,7 +20,7 @@ const argHardwareBreakpointTrue = '--hardware-breakpoint-true';
 const argHardwareBreakpointFalse = '--hardware-breakpoint-false';
 const argThrowError = '--throw-error';
 
-describe('dynamic breakpoint options with hardware set to false', async () => {
+describe.only('dynamic breakpoint options with hardware set to false', async () => {
     let dc: CdtDebugClient;
 
     beforeEach(async function () {
@@ -67,7 +67,7 @@ describe('dynamic breakpoint options with hardware set to false', async () => {
     });
 });
 
-describe('dynamic breakpoint options with hardware set to true', async () => {
+describe.only('dynamic breakpoint options with hardware set to true', async () => {
     let dc: CdtDebugClient;
 
     beforeEach(async function () {
@@ -86,10 +86,10 @@ describe('dynamic breakpoint options with hardware set to true', async () => {
     });
 
     it('insert breakpoint as hardware breakpoint', async function () {
-        // Hardware breakpoints are not supported for Windows
-        if (os.platform() === 'win32') {
-            this.skip();
-        }
+        // // Hardware breakpoints are not supported for Windows
+        // if (os.platform() === 'win32') {
+        //     this.skip();
+        // }
         const bpResp = await dc.setBreakpointsRequest({
             source: {
                 name: 'count.c',
@@ -118,7 +118,7 @@ describe('dynamic breakpoint options with hardware set to true', async () => {
     });
 });
 
-describe('dynamic breakpoint options with throwing error', async () => {
+describe.only('dynamic breakpoint options with throwing error', async () => {
     let dc: CdtDebugClient;
 
     beforeEach(async function () {

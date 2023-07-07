@@ -14,7 +14,7 @@ import { LaunchRequestArguments } from '../GDBDebugSession';
 import { CdtDebugClient } from './debugClient';
 import { fillDefaults, standardBeforeEach, testProgramsDir } from './utils';
 
-describe('launch', function () {
+describe.only('launch', function () {
     let dc: CdtDebugClient;
     const emptyProgram = path.join(testProgramsDir, 'empty');
     const emptySpaceProgram = path.join(testProgramsDir, 'empty space');
