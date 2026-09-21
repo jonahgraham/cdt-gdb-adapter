@@ -36,6 +36,8 @@ export interface RequestArguments extends DebugProtocol.LaunchRequestArguments {
     steppingResponseTimeout?: number;
     updateThreadInfo?: 'missing' | 'when-requested' | 'never';
     run?: RequestArgRun;
+    showGlobalVariables?: boolean;
+    objdumpPath?: string;
 }
 
 export interface LaunchRequestArguments extends RequestArguments {
@@ -68,10 +70,46 @@ export interface RegisterVariableReference {
     regname?: string;
 }
 
+export interface GlobalVariableReference {
+    type: 'global';
+    frameHandle: number;
+    inferiorId: number;
+}
+
+export interface GlobalSourceFileObjectReference {
+    type: 'global_source_file_object';
+    frameHandle: number;
+    inferiorId: number;
+    sourceFile: string;
+}
+
+export interface SymbolProvider {
+    readonly symbolSource: SymbolSource;
+    notifySymbolFileLoaded(inferiorId: number, filePath: string): Promise<void>;
+    getSourceFiles(inferiorId: number): Promise<string[]>;
+    getSymbolNames(
+        inferiorId: number,
+        sourceFile: string
+    ): Promise<string[] | undefined>;
+}
+
+export interface SymbolSource {
+    notifySymbolFileLoaded(inferiorId: number, filePath: string): Promise<void>;
+    getGlobalVariablesByFile(
+        inferiorId: number
+    ): Promise<Map<string, string[]>>;
+}
+
+export interface SymbolReader {
+    readGlobalVariablesByFile(elfFile: string): Promise<Map<string, string[]>>;
+}
+
 export type VariableReference =
     | FrameVariableReference
     | ObjectVariableReference
-    | RegisterVariableReference;
+    | RegisterVariableReference
+    | GlobalVariableReference
+    | GlobalSourceFileObjectReference;
 
 export interface MemoryRequestArguments {
     address: string;
